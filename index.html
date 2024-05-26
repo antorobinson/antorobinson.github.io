@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
     <title>Simple HTML Page</title>
     <style>
         body {
@@ -34,14 +33,11 @@
             padding: 8px;
             text-align: center;
         }
+
         .dataTables_wrapper {
             position: relative;
             clear: both;
             zoom: 1;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .dataTables_filter {
@@ -49,35 +45,9 @@
             margin-bottom: 10px;
         }
 
-        .dataTables_filter input {
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: 'Roboto', sans-serif;
-        }
-
         .dataTables_paginate {
             float: right;
             margin-top: 10px;
-        }
-
-        .dataTables_paginate .paginate_button {
-            padding: 5px 10px;
-            margin-left: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .dataTables_paginate .paginate_button:hover {
-            background-color: #45a049;
-        }
-
-        .dataTables_paginate .paginate_button.current {
-            background-color: #3e8e41;
         }
         tbody {
             padding: 10px 0; /* Add padding between rows */
@@ -94,24 +64,6 @@
         tr td:last-child {
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
-        }
-        @media screen and (max-width: 768px) {
-            .container {
-                width: 100%;
-                padding: 10px;
-            }
-
-            .dataTables_filter {
-                float: none;
-                text-align: left;
-                margin-bottom: 10px;
-            }
-
-            .dataTables_paginate {
-                float: none;
-                text-align: left;
-                margin-top: 10px;
-            }
         }
     </style>
 </head>
@@ -16864,11 +16816,9 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#sampleTable').DataTable({
-                responsive: true,
                 "columnDefs": [
                     { "targets": [0, 1, 2], "orderable": false, "searchable": false }, // Disabling ordering and searching for the first and second columns
                     { "targets": 3, "searchable": false, "orderable": true }, // Disabling ordering for the fourth column
