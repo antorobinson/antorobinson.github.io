@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0; /* Set the default background color */
         }
 
         .container {
@@ -32,7 +31,18 @@
         td {
             padding: 8px;
             text-align: center;
+            font-weight: bold;
         }
+
+        td{
+            color: #ffffff;
+        }
+
+        table,
+            th,
+            td {
+                font-size: 20px;
+            }
 
         .dataTables_wrapper {
             position: relative;
@@ -54,7 +64,7 @@
         }
 
         tr {
-            height: 50px; /* Set the height of the rows */
+            height: 80px; /* Set the height of the rows */
         }
         tr td:first-child {
             border-top-left-radius: 10px;
@@ -65,11 +75,116 @@
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
         }
+        .button-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .button-container button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-size: 24px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.8); /* Fallback background color */
+        }
+
+        .overlay-content {
+            padding: 20px;
+            background-color: inherit;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .overlay-content table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .overlay-content th,
+        .overlay-content td {
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: white; /* Color inside the overlay content */
+        }
+
+        .overlay-content tr {
+            height: auto; /* Adjust row height for overlay content */
+        }
+
+        .overlay-content tr td:first-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .overlay-content tr td:last-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .overlay-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .overlay-close:hover {
+            background-color: #CC0000;
+        }
+
+        .body-overlay-active {
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .body-overlay-active .container {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div class="button-container">
+            <button id="toggleColor">Toggle Font Color</button>
+            <button id="increaseHeight">Increase Row Height</button>
+            <button id="decreaseHeight">Decrease Row Height</button>
+        </div>
         <table id="sampleTable">
             <thead>
                 <tr>
@@ -16820,10 +16935,53 @@
         $(document).ready(function () {
             $('#sampleTable').DataTable({
                 "columnDefs": [
-                    { "targets": [0, 1, 2], "orderable": false, "searchable": false }, // Disabling ordering and searching for the first and second columns
+                    { "targets": [0, 1], "orderable": false, "searchable": false }, // Disabling ordering and searching for the first and second columns
+                    { "targets": 2, "searchable": true, "orderable": false },
                     { "targets": 3, "searchable": false, "orderable": true }, // Disabling ordering for the fourth column
                     { "targets": 4, "searchable": true, "orderable": false } // Enabling searching for the fifth column
                 ]
+            });
+
+            let fontColorToggle = false;
+            $('#toggleColor').click(function () {
+                fontColorToggle = !fontColorToggle;
+                $('td').css('color', fontColorToggle ? '#ffffff' : '#000000');
+            });
+
+            let rowHeight = 80;
+            $('#increaseHeight').click(function () {
+                rowHeight += 10;
+                $('tr').css('height', rowHeight + 'px');
+            });
+
+            $('#decreaseHeight').click(function () {
+                rowHeight = Math.max(10, rowHeight - 10);
+                $('tr').css('height', rowHeight + 'px');
+            });
+
+            $('body').on('click', 'tbody td', function () {
+                let backgroundColor = $(this).closest('tr').css('background-color');
+                let rowContent = $(this).closest('tr').html();
+                let overlay = $('<div class="overlay"></div>').css('background-color', backgroundColor);
+                let overlayContent = $('<div class="overlay-content"><table><tr>' + rowContent + '</tr></table></div>');
+                let closeButton = $('<button class="overlay-close">Close</button>');
+
+                overlay.append(closeButton).append(overlayContent);
+                $('body').append(overlay);
+
+                $('body').addClass('body-overlay-active');
+
+                closeButton.click(function () {
+                    overlay.remove();
+                    $('body').removeClass('body-overlay-active');
+                });
+
+                overlay.click(function (e) {
+                    if (e.target === this) {
+                        overlay.remove();
+                        $('body').removeClass('body-overlay-active');
+                    }
+                });
             });
         });
     </script>
